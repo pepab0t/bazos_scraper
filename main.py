@@ -1,6 +1,7 @@
 import asyncio
 import re
 from dataclasses import dataclass
+from itertools import islice
 from pathlib import Path
 from typing import Any, Coroutine, Iterable, Iterator
 
@@ -11,7 +12,7 @@ from aiohttp import ClientSession
 BASE_URL = "https://reality.bazos.cz"
 HOME_URL = f"{BASE_URL}/prodam/byt/"
 SEP = "------------------------------------------------------------------"
-PAGE_COUNT: int = 25
+PAGE_COUNT: int = 50
 not_interesting_counter: int = 0
 
 PSC_PATTERN = re.compile(".*((\\d)\\d\\d \\d\\d).*")
@@ -46,7 +47,7 @@ async def get_advertisement_list(session: ClientSession, page: int) -> bytes | N
 
 
 async def read_advertisement_list_from_file():
-    async with aiofiles.open("temp.html", "rb") as file:
+    async with aiofiles.open("list.html", "rb") as file:
         return await file.read()
 
 
@@ -68,7 +69,7 @@ def scrape_hrefs(content: bytes):
         m = PSC_PATTERN.match(location_element.text)
         if m is None:
             continue
-        if m.group(2) in {"1", "2"}:
+        if m.group(2) in {"1", "2", "5"}:
             title_tag = ad.find("h2", class_="nadpis")
             if title_tag is None:
                 continue
@@ -82,10 +83,12 @@ class Advertisement:
     description: str
     name: str = ""
     location: str = ""
+    seen: str = ""
 
     def to_text(self) -> str:
         return f"""url: {self.url}
 name: {self.name}
+seen: {self.seen}
 title: {self.title}
 description: {self.description}
         """
@@ -104,9 +107,16 @@ async def get_advertisement_details(session: ClientSession, url: str) -> Adverti
     soup = bs4.BeautifulSoup(html, "html.parser")
     title_tag = soup.find("h1", class_="nadpisdetail")
     description_tag = soup.find("div", class_="popisdetail")
-    name_tag = (
-        left_info.find("span", class_="paction") if (left_info := soup.find("td", class_="listadvlevo")) else None
-    )
+    left_info = soup.find("td", class_="listadvlevo")
+
+    name_tag = left_info.find("span", class_="paction") if left_info else None
+    seen_tag = left_info.select_one('tr:has(td:-soup-contains("Vidělo")) > td:last-child') if left_info else None
+
+    SEEN_PATTERN = re.compile("(\\d+) lidí")
+    if seen_tag:
+        seen = m.group(1) if (m := SEEN_PATTERN.match(seen_tag.text)) is not None else ""
+    else:
+        seen = ""
 
     return Advertisement(
         url,
@@ -115,6 +125,7 @@ async def get_advertisement_details(session: ClientSession, url: str) -> Adverti
         if description_tag is not None
         else f"{url}: no description found (<div class='popisdetail'>)",
         name=name_tag.text if name_tag is not None else "unknown",
+        seen=seen,
     )
 
 
