@@ -31,6 +31,7 @@ class HtmlWriter:
             url=ad.url,
             description=ad.description,
             name=ad.name,
+            location=ad.location,
             seen=ad.seen,
         )
 
@@ -45,6 +46,7 @@ AD_TEMPLATE = """
         {description}
     </p>
     <p class="detail">name: {name}</p>
+    <p class="detail">location: {location}</p>
     <p class="detail">seen: {seen}</p>
 </div>
 """
