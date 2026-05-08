@@ -1,3 +1,5 @@
 venv/
 *.html
 *.txt
+**.pyc
+**/__pycache__
