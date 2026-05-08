@@ -1,11 +1,8 @@
-from typing import Awaitable
-
 import aiofiles
 from aiohttp import ClientSession
 
-from advertisement_utils import create_url, is_interesting
-from entity import Advertisement
-from settings import HOME_URL, SEP
+from advertisement_utils import create_url
+from settings import HOME_URL
 
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
