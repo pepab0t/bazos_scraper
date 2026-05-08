@@ -1,3 +1,5 @@
+import datetime
+
 BASE_URL = "https://reality.bazos.cz"
 HOME_URL = f"{BASE_URL}/prodam/byt/"
 SEP = "------------------------------------------------------------------"
@@ -11,3 +13,7 @@ BLACKLIST = [
     "nabízíme",
     "ve výhradním zastoupení",
 ]
+
+DATETIME_FORMAT = "%H:%M:%S_%d-%m-%Y"
+
+NOW = datetime.datetime.now()

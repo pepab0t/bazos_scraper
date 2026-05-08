@@ -1,8 +1,7 @@
-import datetime
-
 import aiofiles
 
 from entity import Advertisement
+from settings import DATETIME_FORMAT, NOW
 
 
 class HtmlWriter:
@@ -10,8 +9,9 @@ class HtmlWriter:
         self.file = None
 
     async def __aenter__(self):
-        self.file = await aiofiles.open("output.html", "w+")
-        await self.file.write(BEFORE.format(date="xxx"))
+        now_formatted = NOW.strftime(DATETIME_FORMAT)
+        self.file = await aiofiles.open(f"inzeraty-{now_formatted}.html", "w+")
+        await self.file.write(BEFORE.format(date=now_formatted))
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
@@ -44,8 +44,8 @@ AD_TEMPLATE = """
     <p class="description">
         {description}
     </p>
-    <p class="detail">{name}</p>
-    <p class="detail">{seen}</p>
+    <p class="detail">name: {name}</p>
+    <p class="detail">seen: {seen}</p>
 </div>
 """
 
