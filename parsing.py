@@ -1,5 +1,5 @@
 import re
-from typing import Awaitable, Iterable
+from typing import Awaitable, Generator, Iterator
 
 import bs4
 
@@ -8,7 +8,7 @@ from entity import Advertisement
 PSC_PATTERN = re.compile(".*((\\d)\\d\\d \\d\\d).*")
 
 
-def _find_href_in_title(title_tag: bs4.Tag) -> Iterable[str]:
+def _find_href_in_title(title_tag: bs4.Tag) -> Generator[str, None, None]:
     a_tag = title_tag.find("a")
     if a_tag is None:
         return
@@ -16,7 +16,7 @@ def _find_href_in_title(title_tag: bs4.Tag) -> Iterable[str]:
         yield href
 
 
-def scrape_hrefs(content: bytes):
+def parse_links(content: bytes) -> Iterator[str]:
     soup = bs4.BeautifulSoup(content, "html.parser")
     ads = soup.find_all("div", class_="inzeraty inzeratyflex")
     for ad in ads:
