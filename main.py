@@ -26,6 +26,7 @@ async def main():
                 store.visit(href)
                 ad = await parse_advertisement_details(get_ad_content(href, session))
                 if isinstance(ad, str):
+                    print(ad)
                     continue
                 if not is_interesting(ad):
                     continue

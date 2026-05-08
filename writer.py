@@ -76,7 +76,7 @@ BEFORE = """
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                width: 90%
+                width: 90%;
                 max-width: 1000px;
                 margin: 0 auto;
                 gap: 10px;
