@@ -33,7 +33,7 @@ def parse_links(content: bytes) -> Iterator[str]:
             yield from _find_href_in_title(title_tag)
 
 
-async def get_advertisement_details(response: Awaitable[tuple[bytes, str]]) -> Advertisement | str:
+async def parse_advertisement_details(response: Awaitable[tuple[bytes, str]]) -> Advertisement | str:
     html, url = await response
     soup = bs4.BeautifulSoup(html, "html.parser")
     title_tag = soup.find("h1", class_="nadpisdetail")

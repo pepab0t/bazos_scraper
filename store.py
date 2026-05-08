@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import aiofiles
 
 
@@ -7,7 +9,9 @@ class VisitStore:
         self.visited: set[str] = set()
 
     async def __aenter__(self):
-        async with aiofiles.open(self.file_path, "r") as file:
+        path = Path(self.file_path)
+        path.touch(exist_ok=True)
+        async with aiofiles.open(path, "r") as file:
             async for line in file:
                 self.visited.add(line.strip())
         return self

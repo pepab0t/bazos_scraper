@@ -28,30 +28,17 @@ HTTP_HEADERS = {
 not_interesting_counter: int = 0
 
 
-async def get_advertisement_page(session: ClientSession, page: int) -> bytes:
+async def get_advertisement_page(session: ClientSession, page: int) -> bytes | None:
     offset = page * 20
     response = await session.get(HOME_URL + (f"{offset}/" if offset > 0 else ""), headers=HTTP_HEADERS)
+    if not (200 <= response.status <= 299):
+        return
     return await response.content.read()
 
 
 async def read_advertisement_page_from_file():
     async with aiofiles.open("list.html", "rb") as file:
         return await file.read()
-
-
-async def write_description(details_coro: Awaitable[Advertisement | str]):
-    details = await details_coro
-    if isinstance(details, Advertisement):
-        if not is_interesting(details):
-            global not_interesting_counter
-            not_interesting_counter += 1
-            return
-        text = details.to_text()
-    else:
-        text = details
-    async with aiofiles.open("output.txt", "a") as file:
-        await file.write(text + f"\n{SEP}\n")
-        print(f"written: {details.title}")
 
 
 async def get_ad_content(path: str, session: ClientSession) -> tuple[bytes, str]:
