@@ -74,7 +74,8 @@ BEFORE = """
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                max-width: 70%;
+                width: 90%
+                max-width: 1000px;
                 margin: 0 auto;
                 gap: 10px;
             }}
