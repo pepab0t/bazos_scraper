@@ -32,6 +32,7 @@ async def main():
                     continue
                 interesting += 1
                 await w.add_advertisement(ad)
+                break
             print(f"total {interesting} of them was interesting")
             print(SEP)
 

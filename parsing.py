@@ -42,6 +42,11 @@ async def parse_advertisement_details(response: Awaitable[tuple[bytes, str]]) ->
 
     name_tag = left_info.find("span", class_="paction") if left_info else None
     seen_tag = left_info.select_one('tr:has(td:-soup-contains("Vidělo")) > td:last-child') if left_info else None
+    location_tag = (
+        left_info.select_one('tr:has(td:-soup-contains("Lokalita:")) > td:last-child > a:last-child')
+        if left_info
+        else None
+    )
 
     SEEN_PATTERN = re.compile("(\\d+) lidí")
     if seen_tag:
@@ -57,4 +62,5 @@ async def parse_advertisement_details(response: Awaitable[tuple[bytes, str]]) ->
         else f"{url}: no description found (<div class='popisdetail'>)",
         name=name_tag.text if name_tag is not None else "unknown",
         seen=seen,
+        location=location_tag.text if location_tag else "unknown",
     )
