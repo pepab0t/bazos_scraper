@@ -4,7 +4,7 @@ from aiohttp import ClientSession
 
 from advertisement_utils import is_interesting
 from parsing import parse_advertisement_details, parse_links
-from settings import PAGE_COUNT, SEP, STORE_FILE
+from settings import PAGE_COUNT, SEP, START_PAGE, STORE_FILE
 from store import VisitStore
 from web import get_ad_content, get_advertisement_page
 from writer import HtmlWriter
@@ -13,7 +13,7 @@ from writer import HtmlWriter
 async def main():
     async with ClientSession() as session, VisitStore(STORE_FILE) as store, HtmlWriter() as w:
         total = 0
-        for page in range(PAGE_COUNT):
+        for page in range(START_PAGE, PAGE_COUNT):
             print(f"reading page: {page + 1}/{PAGE_COUNT}")
             contents = await get_advertisement_page(session, page)
             if contents is None:
