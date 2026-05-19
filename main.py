@@ -12,6 +12,7 @@ from writer import HtmlWriter
 
 async def main():
     async with ClientSession() as session, VisitStore(STORE_FILE) as store, HtmlWriter() as w:
+        total = 0
         for page in range(PAGE_COUNT):
             print(f"reading page: {page + 1}/{PAGE_COUNT}")
             contents = await get_advertisement_page(session, page)
@@ -34,7 +35,9 @@ async def main():
                 await w.add_advertisement(ad)
                 break
             print(f"total {interesting} of them was interesting")
+            total += interesting
             print(SEP)
+        print(f"total found: {total}")
 
 
 if __name__ == "__main__":
