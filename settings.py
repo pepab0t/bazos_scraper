@@ -8,6 +8,10 @@ PAGE_COUNT: int = 20
 
 STORE_FILE = "visited.txt"
 
+NAME_BLACKLIST = [
+    "real",
+]
+
 BLACKLIST = [
     "realitní",
     "realitka",
@@ -15,7 +19,9 @@ BLACKLIST = [
     "ve výhradním zastoupení",
     "nevolat",
     "nevolejte",
-    "bez provize"
+    "bez provize",
+    "nevolejte",
+    "nevolat"
 ]
 
 DATETIME_FORMAT = "%d-%m-%Y_%Hh%Mm%Ss"

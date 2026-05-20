@@ -1,19 +1,18 @@
 from entity import Advertisement
-from settings import BASE_URL, BLACKLIST
+from settings import BASE_URL, BLACKLIST, NAME_BLACKLIST
 
 
 def is_interesting(ad: Advertisement) -> bool:
     name: str = ad.name.lower()
-    if "real" in name:
-        return False
+    for name_blacklist_word in NAME_BLACKLIST:
+        if name_blacklist_word in name:
+            return False
 
     text = ad.searchable_text
-    if "nevolat" in text:
-        return True
-
     for blacklist_word in BLACKLIST:
         if blacklist_word in text:
             return False
+
     return True
 
 
