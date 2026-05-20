@@ -3,7 +3,7 @@ import datetime
 BASE_URL = "https://reality.bazos.cz"
 HOME_URL = f"{BASE_URL}/prodam/byt/"
 SEP = "------------------------------------------------------------------"
-START_PAGE: int = 88
+START_PAGE: int = 0
 PAGE_COUNT: int = 20
 
 STORE_FILE = "visited.txt"

@@ -13,7 +13,7 @@ from writer import HtmlWriter
 async def main():
     async with ClientSession() as session, VisitStore(STORE_FILE) as store, HtmlWriter() as w:
         total = 0
-        for page in range(START_PAGE, PAGE_COUNT):
+        for page in range(START_PAGE, START_PAGE + PAGE_COUNT):
             print(f"reading page: {page + 1}/{PAGE_COUNT}")
             contents = await get_advertisement_page(session, page)
             if contents is None:
